@@ -4,9 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const nextConfig: NextConfig = {
-  experimental: {
-    allowedDevOrigins: ['*']
-  }
+  experimental: {}
 };
 
 export default nextConfig;
