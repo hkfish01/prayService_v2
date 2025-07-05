@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { getProvider } from "../libs/web3";
 import { getContract } from "../libs/contract";
 import ActivityCard from "../components/ActivityCard";
-import WalletConnect from "../components/WalletConnect";
 
 export default function Activities() {
-  const [activities, setActivities] = useState<unknown[]>([]);
-  const [wallet, setWallet] = useState<string | null>(null);
+  const [activities, setActivities] = useState<Record<string, unknown>[]>([]);
 
   useEffect(() => {
     async function fetchActivities() {
@@ -25,11 +23,10 @@ export default function Activities() {
 
   return (
     <div>
-      <h1>Completed Transaction</h1>
-      <WalletConnect onConnected={setWallet} />
+      <h1 style={{ textAlign: "center", marginBottom: 20, fontSize: 24, fontWeight: "bold", color: "#FFFFFF" }}>Completed Transaction</h1>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {activities.map((act) => (
-          <ActivityCard key={String(activities.indexOf(act))} activity={act as Record<string, any>} />
+          <ActivityCard key={String(activities.indexOf(act))} activity={act as Record<string, unknown>} />
         ))}
       </div>
     </div>

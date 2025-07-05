@@ -10,14 +10,14 @@ const { Header, Content } = Layout;
 const { Title } = Typography;
 
 export default function Services() {
-  const [services, setServices] = useState<unknown[]>([]);
+  const [services, setServices] = useState<Record<string, unknown>[]>([]);
   const [wallet, setWallet] = useState<string | null>(null);
 
   const fetchServices = async () => {
     const provider = await getProvider();
     const contract = getContract(provider);
     const data = await contract.getAllServices();
-    setServices(data.filter((s: unknown) => (s as any).isActive));
+    setServices(data.filter((s: unknown) => (s as Record<string, unknown>).isActive));
   };
 
   useEffect(() => {
@@ -44,8 +44,8 @@ export default function Services() {
           <Col span={24}> 
             <Row gutter={[16, 16]}>
               {services.map((req) => ( 
-                <Col key={(req as any).id} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((req as any).id) % 4) * 0.1}s both` }}>
-                  <ServiceCard service={req as any} wallet={wallet} />
+                <Col key={(req as Record<string, unknown>).id as string} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((req as Record<string, unknown>).id) % 4) * 0.1}s both` }}>
+                  <ServiceCard service={req as Record<string, unknown>} wallet={wallet} />
                 </Col>
               ))}
             </Row>

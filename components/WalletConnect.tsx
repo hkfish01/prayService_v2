@@ -7,10 +7,10 @@ function WalletConnect({ onConnected }: { onConnected: (address: string) => void
   const handleConnect = async () => {
     try {
       const signer = await connectWallet();
-      const addr = await signer.getAddress();
-      setAddress(addr);
-      onConnected(addr);
-    } catch (e) {
+      const address = await signer.getAddress();
+      setAddress(address);
+      onConnected(address);
+    } catch {
       alert("Wallet connect fail.");
     }
   };

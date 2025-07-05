@@ -11,7 +11,7 @@ const { Title } = Typography;
 export default function Home() {
   const [requests, setRequests] = useState<unknown[]>([]);
   const [services, setServices] = useState<unknown[]>([]);
-  const [wallet, setWallet] = useState<string | null>(null);
+  const [wallet] = useState<string | null>(null);
 
   const fetchRequests = async () => {
     try {
@@ -21,7 +21,7 @@ export default function Home() {
       try {
         signer = await provider.getSigner();
         console.log('Signer obtained:', signer);
-      } catch (e) {
+      } catch {
         console.log('No signer available, using provider instead.');
       }
       const contract = getContract(signer || provider);
@@ -32,7 +32,7 @@ export default function Home() {
       const owner = await contract.owner();
       console.log('Contract owner:', owner);
       console.log('Data item format:', data.length > 0 ? data[0] : 'No data');
-      setRequests(data.filter((r: unknown) => (r as any).isActive));
+      setRequests(data.filter((r: unknown) => (r as Record<string, unknown>).isActive));
     } catch (e) {
       console.error('getAllRequests error:', e);
     }
@@ -44,12 +44,12 @@ export default function Home() {
       let signer;
       try {
         signer = await provider.getSigner();
-      } catch (e) {
+      } catch {
         console.log('No signer available, using provider instead.');
       }
       const contract = getContract(signer || provider);
       const data = await contract.getAllServices();
-      setServices(data.filter((s: unknown) => (s as any).isActive));
+      setServices(data.filter((s: unknown) => (s as Record<string, unknown>).isActive));
     } catch (e) {
       console.error('getAllServices error:', e);
     }
@@ -71,8 +71,8 @@ export default function Home() {
             <Title level={3} style={{color:'#ffffff'}}>Request List</Title>
             <Row gutter={[16, 16]}>
               {requests.map((req) => ( 
-                <Col key={(req as any).id} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((req as any).id) % 4) * 0.1}s both` }}>
-                  <RequestCard request={req as any} wallet={wallet} />
+                <Col key={(req as Record<string, unknown>).id as string} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((req as Record<string, unknown>).id) % 4) * 0.1}s both` }}>
+                  <RequestCard request={req as Record<string, unknown>} />
                 </Col>
               ))}
             </Row>
@@ -81,8 +81,8 @@ export default function Home() {
             <Title level={3}  style={{color:'#ffffff'}}>Service List</Title>
             <Row gutter={[16, 16]}>
               {services.map((service) => ( 
-                <Col key={(service as any).id} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((service as any).id) % 4) * 0.1}s both` }}>
-                  <ServiceCard service={service as any} wallet={wallet} />
+                <Col key={(service as Record<string, unknown>).id as string} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((service as Record<string, unknown>).id) % 4) * 0.1}s both` }}>
+                  <ServiceCard service={service as Record<string, unknown>} wallet={wallet} />
                 </Col>
               ))}
             </Row>

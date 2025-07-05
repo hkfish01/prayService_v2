@@ -4,11 +4,17 @@ import { getContract } from "../libs/contract";
 import ProfileInfo from "../components/ProfileInfo";
 import WalletConnect from "../components/WalletConnect";
 
+interface Transaction {
+  requester: string;
+  isCompleted: boolean;
+  [key: string]: unknown;
+}
+
 export default function Profile() {
   const [wallet, setWallet] = useState<string | null>(null);
-  const [requests, setRequests] = useState<unknown[]>([]);
-  const [services, setServices] = useState<unknown[]>([]);
-  const [purchasedServices, setPurchasedServices] = useState<unknown[]>([]);
+  const [requests, setRequests] = useState<Record<string, unknown>[]>([]);
+  const [services, setServices] = useState<Record<string, unknown>[]>([]);
+  const [purchasedServices, setPurchasedServices] = useState<Record<string, unknown>[]>([]);
 
   useEffect(() => {
     if (!wallet) return;
@@ -48,7 +54,7 @@ export default function Profile() {
       const contract = getContract(signer);
       await contract.confirmService(transactionId);
       alert("Confirm the service successfully, the funds have been transferred.");
-      // 刷新已购买服务列表
+      // 刷新已購買服務列表
       const provider = await getProvider();
       const updatedContract = getContract(provider);
       const transactionIds = await updatedContract.getUserTransactions(wallet);
@@ -59,29 +65,37 @@ export default function Profile() {
         purchasedSrvs.push({ ...ps, transactionId: id, transaction });
       }
       setPurchasedServices(purchasedSrvs);
-    } catch (err) {
-      alert("Confirm the service failed: " + (err as any).message);
+    } catch (err: unknown) {
+      alert("Confirm the service failed: " + (err instanceof Error ? err.message : String(err)));
     }
   };
 
   return (
     <div>
-      <h1>Profile</h1>
+      <h1 style={{ textAlign: "center", marginBottom: 20, fontSize: 24, fontWeight: "bold", color: "#FFFFFF" }}>Profile</h1>
       <WalletConnect onConnected={setWallet} />
       {wallet && (
         <> 
           <ProfileInfo wallet={wallet} requests={requests} services={services} />
-          <h2>Confirmed Services</h2>
+          <h2 style={{ marginTop: 20, fontSize: 18, fontWeight: "bold", color: "#FFFFFF" }}>Confirmed Services</h2>
           <ul>
-            {purchasedServices.map((service) => (
-              <li key={(service as any).id}>
-                <p>{(service as any).title}</p>
-                <p>Price: {(service as any).price ? Number((service as any).price) / 1e18 : 0} BNB</p>
-                {(service as any).transaction && (service as any).transaction.requester.toLowerCase() === wallet.toLowerCase() && !(service as any).transaction.isCompleted && (
-                  <button onClick={() => confirmService((service as any).transactionId)}>Confirm the Service</button>
-                )}
-              </li>
-            ))}
+            {purchasedServices.map((service) => {
+              const s = service as Record<string, unknown>;
+              return (
+                <li style={{ color: "#FFFFFF" }} key={s.id as string}>
+                  <p style={{ color: "#FFFFFF" }}>{s.title as string}</p>
+                  <p style={{ color: "#FFFFFF" }}>Price: {s.price ? Number(s.price as string) / 1e18 : 0} BNB</p>
+                  {(() => {
+                    const t = s.transaction as Transaction;
+                    return t && typeof t.requester === 'string' &&
+                      t.requester.toLowerCase() === wallet?.toLowerCase() &&
+                      !t.isCompleted ? (
+                        <button onClick={() => confirmService(s.transactionId as string)}>Confirm the Service</button>
+                      ) : null;
+                  })()}
+                </li>
+              );
+            })}
           </ul>
         </>
       )}

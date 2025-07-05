@@ -28,10 +28,14 @@ export default function CreateServiceForm({ onCreated }: { onCreated?: () => voi
       const img = `/${category.toLowerCase()}.jpg`;
       await contract.createService(title, desc, img, parseEther(price), contact);
       alert("Publish Success.");
-      setTitle(""); setDesc(""); setCategory(categories[0] || ""); setPrice(""); setContact("");
-      onCreated && onCreated();
-    } catch (err: any) {
-      alert("Publish Fail：" + err.message);
+      setTitle("");
+      setDesc("");
+      setCategory(categories[0] || "");
+      setPrice("");
+      setContact("");
+      if (onCreated) onCreated();
+    } catch (err: unknown) {
+      alert("Publish Fail：" + (err instanceof Error ? err.message : String(err)));
     }
     setLoading(false);
   };
