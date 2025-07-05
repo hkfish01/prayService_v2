@@ -3,8 +3,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const nextConfig: NextConfig = {
-  experimental: {}
-};
+const nextConfig: NextConfig = {}
 
 export default nextConfig;

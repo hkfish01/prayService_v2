@@ -5,7 +5,7 @@ import ActivityCard from "../components/ActivityCard";
 import WalletConnect from "../components/WalletConnect";
 
 export default function Activities() {
-  const [activities, setActivities] = useState<any[]>([]);
+  const [activities, setActivities] = useState<unknown[]>([]);
   const [wallet, setWallet] = useState<string | null>(null);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function Activities() {
       <WalletConnect onConnected={setWallet} />
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {activities.map((act) => (
-          <ActivityCard key={act.id} activity={act} />
+          <ActivityCard key={String(activities.indexOf(act))} activity={act as any} />
         ))}
       </div>
     </div>
