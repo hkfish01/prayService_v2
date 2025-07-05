@@ -6,9 +6,9 @@ import WalletConnect from "../components/WalletConnect";
 
 export default function Profile() {
   const [wallet, setWallet] = useState<string | null>(null);
-  const [requests, setRequests] = useState<any[]>([]);
-  const [services, setServices] = useState<any[]>([]);
-  const [purchasedServices, setPurchasedServices] = useState<any[]>([]);
+  const [requests, setRequests] = useState<unknown[]>([]);
+  const [services, setServices] = useState<unknown[]>([]);
+  const [purchasedServices, setPurchasedServices] = useState<unknown[]>([]);
 
   useEffect(() => {
     if (!wallet) return;
@@ -19,17 +19,17 @@ export default function Profile() {
       const srvIds = await contract.getUserServices(wallet);
       const transactionIds = await contract.getUserTransactions(wallet);
       const reqs = [];
-      for (let id of reqIds) {
+      for (const id of reqIds) {
         const r = await contract.requests(id);
         reqs.push(r);
       }
       const srvs = [];
-      for (let id of srvIds) {
+      for (const id of srvIds) {
         const s = await contract.services(id);
         srvs.push(s);
       }
       const purchasedSrvs = [];
-      for (let id of transactionIds) {
+      for (const id of transactionIds) {
         const transaction = await contract.transactions(id);
         const ps = await contract.services(transaction.serviceId);
         purchasedSrvs.push({ ...ps, transactionId: id, transaction });
@@ -41,7 +41,7 @@ export default function Profile() {
     fetchProfile();
   }, [wallet]);
 
-  const confirmService = async (transactionId: any) => {
+  const confirmService = async (transactionId: string | number) => {
     if (!wallet) return alert("Please connect your wallet first.");
     try {
       const signer = await connectWallet();
@@ -53,7 +53,7 @@ export default function Profile() {
       const updatedContract = getContract(provider);
       const transactionIds = await updatedContract.getUserTransactions(wallet);
       const purchasedSrvs = [];
-      for (let id of transactionIds) {
+      for (const id of transactionIds) {
         const transaction = await updatedContract.transactions(id);
         const ps = await updatedContract.services(transaction.serviceId);
         purchasedSrvs.push({ ...ps, transactionId: id, transaction });
@@ -74,11 +74,11 @@ export default function Profile() {
           <h2>Confirmed Services</h2>
           <ul>
             {purchasedServices.map((service) => (
-              <li key={service.id}>
-                <p>{service.title}</p>
-                <p>Price: {service.price ? Number(service.price) / 1e18 : 0} BNB</p>
-                {service.transaction && service.transaction.requester.toLowerCase() === wallet.toLowerCase() && !service.transaction.isCompleted && (
-                  <button onClick={() => confirmService(service.transactionId)}>Confirm the Service</button>
+              <li key={(service as any).id}>
+                <p>{(service as any).title}</p>
+                <p>Price: {(service as any).price ? Number((service as any).price) / 1e18 : 0} BNB</p>
+                {(service as any).transaction && (service as any).transaction.requester.toLowerCase() === wallet.toLowerCase() && !(service as any).transaction.isCompleted && (
+                  <button onClick={() => confirmService((service as any).transactionId)}>Confirm the Service</button>
                 )}
               </li>
             ))}

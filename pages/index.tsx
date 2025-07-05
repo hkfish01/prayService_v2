@@ -9,8 +9,8 @@ const { Header, Content } = Layout;
 const { Title } = Typography;
 
 export default function Home() {
-  const [requests, setRequests] = useState<any[]>([]);
-  const [services, setServices] = useState<any[]>([]);
+  const [requests, setRequests] = useState<unknown[]>([]);
+  const [services, setServices] = useState<unknown[]>([]);
   const [wallet, setWallet] = useState<string | null>(null);
 
   const fetchRequests = async () => {
@@ -32,7 +32,7 @@ export default function Home() {
       const owner = await contract.owner();
       console.log('Contract owner:', owner);
       console.log('Data item format:', data.length > 0 ? data[0] : 'No data');
-      setRequests(data.filter((r: any) => r.isActive));
+      setRequests(data.filter((r: unknown) => (r as any).isActive));
     } catch (e) {
       console.error('getAllRequests error:', e);
     }
@@ -49,7 +49,7 @@ export default function Home() {
       }
       const contract = getContract(signer || provider);
       const data = await contract.getAllServices();
-      setServices(data.filter((s: any) => s.isActive));
+      setServices(data.filter((s: unknown) => (s as any).isActive));
     } catch (e) {
       console.error('getAllServices error:', e);
     }
@@ -71,8 +71,8 @@ export default function Home() {
             <Title level={3} style={{color:'#ffffff'}}>Request List</Title>
             <Row gutter={[16, 16]}>
               {requests.map((req) => ( 
-                <Col key={req.id} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number(req.id) % 4) * 0.1}s both` }}>
-                  <RequestCard request={req} wallet={wallet} />
+                <Col key={(req as any).id} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((req as any).id) % 4) * 0.1}s both` }}>
+                  <RequestCard request={req as any} wallet={wallet} />
                 </Col>
               ))}
             </Row>
@@ -81,8 +81,8 @@ export default function Home() {
             <Title level={3}  style={{color:'#ffffff'}}>Service List</Title>
             <Row gutter={[16, 16]}>
               {services.map((service) => ( 
-                <Col key={service.id} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number(service.id) % 4) * 0.1}s both` }}>
-                  <ServiceCard service={service} wallet={wallet} />
+                <Col key={(service as any).id} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((service as any).id) % 4) * 0.1}s both` }}>
+                  <ServiceCard service={service as any} wallet={wallet} />
                 </Col>
               ))}
             </Row>

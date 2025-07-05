@@ -10,14 +10,14 @@ const { Header, Content } = Layout;
 const { Title } = Typography;
 
 export default function Request() {
-  const [requests, setRequests] = useState<any[]>([]);
+  const [requests, setRequests] = useState<unknown[]>([]);
   const [wallet, setWallet] = useState<string | null>(null);
 
   const fetchRequests = async () => {
     const provider = await getProvider();
     const contract = getContract(provider);
     const data = await contract.getAllRequests();
-    setRequests(data.filter((r: any) => r.isActive));
+    setRequests(data.filter((r: unknown) => (r as any).isActive));
   };
 
   useEffect(() => {
@@ -42,8 +42,8 @@ export default function Request() {
           <Col span={24}> 
             <Row gutter={[16, 16]}>
               {requests.map((req) => ( 
-                <Col key={req.id} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number(req.id) % 4) * 0.1}s both` }}>
-                  <RequestCard request={req} wallet={wallet} />
+                <Col key={(req as any).id} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((req as any).id) % 4) * 0.1}s both` }}>
+                  <RequestCard request={req as any} wallet={wallet} />
                 </Col>
               ))}
             </Row>

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ActivityCard({ activity }: { activity: any }) {
+export default function ActivityCard({ activity }: { activity: Record<string, any> }) {
   return (
     <div style={{ border: "1px solid #eee", margin: 8, padding: 16, width: 300 }}>
       <h3>Transaction ID: {activity.id.toString()}</h3>

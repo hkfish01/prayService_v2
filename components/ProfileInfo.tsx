@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ProfileInfo({ wallet, requests, services }: { wallet: string, requests: any[], services: any[] }) {
+export default function ProfileInfo({ wallet, requests, services }: { wallet: string, requests: Record<string, any>[], services: Record<string, any>[] }) {
   return (
     <div>
       <h2>Wallet address: {wallet}</h2>

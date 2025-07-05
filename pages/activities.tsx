@@ -29,7 +29,7 @@ export default function Activities() {
       <WalletConnect onConnected={setWallet} />
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {activities.map((act) => (
-          <ActivityCard key={String(activities.indexOf(act))} activity={act as any} />
+          <ActivityCard key={String(activities.indexOf(act))} activity={act as Record<string, any>} />
         ))}
       </div>
     </div>

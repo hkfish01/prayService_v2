@@ -29,8 +29,8 @@ export default function CreateRequestForm({ onCreated }: { onCreated?: () => voi
       alert("Publish Success.");
       setTitle(""); setDesc(""); setCategory(categories[0] || ""); setPrice("");
       onCreated && onCreated();
-    } catch (err) {
-      alert("Publish Fail：" + (err as any).message);
+    } catch (err: any) {
+      alert("Publish Fail：" + err.message);
     }
     setLoading(false);
   };
