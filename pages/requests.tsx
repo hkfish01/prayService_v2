@@ -32,10 +32,12 @@ export default function Request() {
       <Content style={{ padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Row gutter={[16, 16]} style={{ width: '90%', maxWidth: '800px'}}>
           <Col span={24} style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center' }}>
-            <WalletConnect onConnected={setWallet} style={{ animation: 'fadeInDown 0.5s ease-out', borderRadius: '8px', overflow: 'hidden', width: '100%', maxWidth: '500px' }} />
+            <WalletConnect onConnected={setWallet} />
           </Col>
           <Col span={24} style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center', background: 'rgba(255, 255, 255, 0.9)', borderRadius: '8px', boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)', padding: '20px'  }}>
-            <CreateRequestForm onCreated={fetchRequests} style={{ animation: 'fadeInDown 0.5s ease-out', borderRadius: '8px', overflow: 'hidden', width: '100%', maxWidth: '500px', padding:'10px' }} />
+            <div style={{ animation: 'fadeInDown 0.5s ease-out', borderRadius: '8px', overflow: 'hidden', width: '100%', maxWidth: '500px', padding: '10px' }}>
+              <CreateRequestForm onCreated={fetchRequests} />
+            </div>
           </Col>
           <Col span={24}> 
             <Row gutter={[16, 16]}>
