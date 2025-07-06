@@ -28,9 +28,6 @@ export default function Home() {
       const data = await contract.getAllRequests();
       // console.log('Raw getAllRequests data:', data);
       // console.log('getAllRequests:', data);
-      const owner = await contract.owner();
-      // console.log('Contract owner:', owner);
-      // console.log('Data item format:', data.length > 0 ? data[0] : 'No data');
       setRequests(data.filter((r: unknown) => (r as Record<string, unknown>).isActive));
     } catch (e) {
       console.error('getAllRequests error:', e);
