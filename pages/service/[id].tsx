@@ -71,7 +71,7 @@ export default function ServiceDetail() {
   return (
     <div style={{ maxWidth: 600, margin: '40px auto', background: '#fff', borderRadius: 8, padding: 24 }}>
       <WalletConnect onConnected={setWallet} />
-      <h2 style={{margin:'20px 0'}}>{service.title}</h2>
+      <h2 style={{margin:'20px 0'}}>{String(service.title)}</h2>
       <Image
         src={typeof service.imageUrl === 'string' && service.imageUrl !== 'NA'
           ? service.imageUrl
@@ -83,7 +83,7 @@ export default function ServiceDetail() {
         height={200}
         style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: 8 }}
       />
-      <p style={{margin:'10px 0px'}}>{service.description}</p>
+      <p style={{margin:'10px 0px'}}>{String(service.description)}</p>
       <p style={{margin:'10px 0px'}}>Price: {service.price ? (Number(service.price as string) / 1e18).toFixed(4) : '0.0000'} BNB</p>
       <p style={{margin:'10px 0px'}}>Service Provider: {typeof service.provider === 'string' ? service.provider.slice(0, 6) + '...' + service.provider.slice(-4) : ''}</p>
       {/* provider 本人可見的關閉按鈕 */}

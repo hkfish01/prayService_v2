@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { connectWallet } from "../libs/web3";
 
+// 定義 EthereumProvider 型別
+interface EthereumProvider {
+  request: (args: { method: string }) => Promise<any>;
+  on?: (event: string, handler: (...args: unknown[]) => void) => void;
+  removeListener?: (event: string, handler: (...args: unknown[]) => void) => void;
+}
+
+declare global {
+  interface Window {
+    ethereum?: EthereumProvider;
+  }
+}
+
 function WalletConnect({ onConnected }: { onConnected: (address: string) => void }) {
   const [address, setAddress] = useState<string | null>(null);
 
   // 檢查當前連接狀態
   const checkWallet = async () => {
-    if (typeof window === "undefined" || !(window as any).ethereum) return;
+    if (typeof window === "undefined" || !(window.ethereum as EthereumProvider)) return;
     try {
-      const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
+      const accounts = await (window.ethereum as EthereumProvider).request({ method: 'eth_accounts' }) as string[];
       if (accounts && accounts[0]) {
         setAddress(accounts[0]);
         localStorage.setItem('wallet', accounts[0]);
@@ -27,15 +40,16 @@ function WalletConnect({ onConnected }: { onConnected: (address: string) => void
 
   useEffect(() => {
     checkWallet();
-    if ((window as any).ethereum) {
-      (window as any).ethereum.on('accountsChanged', checkWallet);
+    const eth = window.ethereum as EthereumProvider;
+    if (eth && eth.on) {
+      eth.on('accountsChanged', checkWallet);
     }
     return () => {
-      if ((window as any).ethereum && (window as any).ethereum.removeListener) {
-        (window as any).ethereum.removeListener('accountsChanged', checkWallet);
+      if (eth && eth.removeListener) {
+        eth.removeListener('accountsChanged', checkWallet);
       }
     };
-  }, [onConnected]);
+  }, [onConnected, checkWallet]);
 
   const handleConnect = async () => {
     try {
