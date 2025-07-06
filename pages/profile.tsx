@@ -179,7 +179,7 @@ export default function Profile() {
               <>
                 <h2 ref={myPendingRequestRef} style={{ marginTop: 20, fontSize: 18, fontWeight: "bold", color: "#FFFFFF", marginLeft:10 }}>
                   My Requests (我購買的服務)
-                  <select value={myRequestStatus} onChange={e => setMyRequestStatus(e.target.value as any)} style={{ color:'#000', marginLeft:12, padding:2, borderRadius:4}}>
+                  <select value={myRequestStatus} onChange={e => setMyRequestStatus(e.target.value as 'all' | 'completed' | 'pending' | 'cancelled')} style={{ color:'#000', marginLeft:12, padding:2, borderRadius:4}}>
                     <option value="all">All</option>
                     <option value="completed">Completed</option>
                     <option value="pending">Pending</option>
@@ -208,7 +208,7 @@ export default function Profile() {
                 </div>
                 <h2 ref={myPendingServicesRef} style={{ marginTop: 20, fontSize: 18, fontWeight: "bold", color: "#FFFFFF", marginLeft:10 }}>
                   My Services (我提供的服務)
-                  <select value={myServiceStatus} onChange={e => setMyServiceStatus(e.target.value as any)} style={{ color:'#000', marginLeft:12, padding:2, borderRadius:4}}>
+                  <select value={myServiceStatus} onChange={e => setMyServiceStatus(e.target.value as 'all' | 'completed' | 'pending' | 'cancelled')} style={{ color:'#000', marginLeft:12, padding:2, borderRadius:4}}>
                     <option value="all">All</option>
                     <option value="completed">Completed</option>
                     <option value="pending">Pending</option>

@@ -11,7 +11,6 @@ const { Title } = Typography;
 export default function Home() {
   const [requests, setRequests] = useState<unknown[]>([]);
   const [services, setServices] = useState<unknown[]>([]);
-  const [wallet] = useState<string | null>(null);
 
   const fetchRequests = async () => {
     try {

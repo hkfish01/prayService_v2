@@ -8,10 +8,9 @@ import Image from "next/image";
 export default function ServiceDetail() {
   const router = useRouter();
   const { id } = router.query;
-  const [service, setService] = useState<Record<string, any> | null>(null);
+  const [service, setService] = useState<Record<string, unknown> | null>(null);
   const [wallet, setWallet] = useState<string | null>(null);
   const [contact, setContact] = useState("");
-  const [loading, setLoading] = useState(false);
   const [closing, setClosing] = useState(false);
   const [ancestorName, setAncestorName] = useState("");
   const [ancestorBirthPlace, setAncestorBirthPlace] = useState("");

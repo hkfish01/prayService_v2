@@ -5,13 +5,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 function ServiceCard({ service, wallet }: { service: Record<string, unknown>, wallet: string | null }) {
-  const [contact, setContact] = useState("");
   const [closing, setClosing] = useState(false);
   const router = useRouter();
-
-  const handleBuy = async () => {
-    // 已移除，購買流程與 ancestor 輸入改由詳情頁處理
-  };
 
   const handleCloseService = async () => {
     if (!window.confirm('Are you sure to close this service?')) return;

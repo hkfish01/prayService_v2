@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function RequestDetail() {
   const router = useRouter();
   const { id } = router.query;
-  const [request, setRequest] = useState<Record<string, any> | null>(null);
+  const [request, setRequest] = useState<Record<string, unknown> | null>(null);
   const [wallet, setWallet] = useState<string | null>(null);
   const [closing, setClosing] = useState(false);
 
