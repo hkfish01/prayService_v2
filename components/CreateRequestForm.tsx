@@ -40,7 +40,7 @@ export default function CreateRequestForm({ onCreated }: { onCreated?: () => voi
 
   return (
     <form onSubmit={handleSubmit} style={{ margin: 16 }}>
-      <h2>Post a pray request</h2>
+      <h2>Post a Joss paper burning service request</h2>
       <input placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} required  style={{margin:'5px 0px', color:'#ffffff', width:'100%'}}/><br />
       <textarea placeholder="Description of the Job" value={desc} onChange={e => setDesc(e.target.value)} required  style={{margin:'5px 0px', color:'#ffffff', width:'100%'}}/><br />
       {isClient && (

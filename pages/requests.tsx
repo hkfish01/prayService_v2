@@ -27,7 +27,7 @@ export default function Request() {
   return (
     <Layout style={{ minHeight: '100vh', background: 'transparent' }}>
       <Header style={{ padding: '12px 24px', background: 'rgba(34, 17, 68, 0.8)', color: '#e0d4ff', textAlign: 'center' }}>
-        <Title level={2} style={{ color: '#ffffff', margin: 0, display: 'inline-block' }}>Pray Request</Title>
+        <Title level={2} style={{ color: '#ffffff', margin: 0, display: 'inline-block' }}>Joss Paper Burning Service Request</Title>
       </Header>
       <Content style={{ padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Row gutter={[16, 16]} style={{ width: '90%', maxWidth: '800px'}}>

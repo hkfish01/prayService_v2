@@ -125,7 +125,7 @@ export default function Profile() {
       )}
       {wallet && (
         <>
-          <h2 ref={myRequestRef} style={{ marginTop: 20, fontSize: 18, fontWeight: "bold", color: "#FFFFFF", marginLeft:10 }}>My Requests</h2>
+          <h2 ref={myRequestRef} style={{ marginTop: 20, fontSize: 18, fontWeight: "bold", color: "#FFFFFF", marginLeft:10 }}>My Joss Paper Burning Service Requests</h2>
           <div style={{ 
             display: 'grid',
             gap: 16,
@@ -139,7 +139,7 @@ export default function Profile() {
               </div>
             ))}
           </div>
-          <h2 ref={myProvidedServiceRef} style={{ marginTop: 20, fontSize: 18, fontWeight: "bold", color: "#FFFFFF", marginLeft:10 }}>My Provided Services</h2>
+          <h2 ref={myProvidedServiceRef} style={{ marginTop: 20, fontSize: 18, fontWeight: "bold", color: "#FFFFFF", marginLeft:10 }}>My Provided Joss Paper Burning Service</h2>
           <div style={{ 
             display: 'grid',
             gap: 16,
@@ -178,7 +178,7 @@ export default function Profile() {
             return (
               <>
                 <h2 ref={myPendingRequestRef} style={{ marginTop: 20, fontSize: 18, fontWeight: "bold", color: "#FFFFFF", marginLeft:10 }}>
-                  My Requests (我購買的服務)
+                  My Joss Paper Burning Service Requests
                   <select value={myRequestStatus} onChange={e => setMyRequestStatus(e.target.value as 'all' | 'completed' | 'pending' | 'cancelled')} style={{ color:'#000', marginLeft:12, padding:2, borderRadius:4}}>
                     <option value="all">All</option>
                     <option value="completed">Completed</option>
@@ -207,7 +207,7 @@ export default function Profile() {
                   ))}
                 </div>
                 <h2 ref={myPendingServicesRef} style={{ marginTop: 20, fontSize: 18, fontWeight: "bold", color: "#FFFFFF", marginLeft:10 }}>
-                  My Services (我提供的服務)
+                  My Joss Paper Burning Service
                   <select value={myServiceStatus} onChange={e => setMyServiceStatus(e.target.value as 'all' | 'completed' | 'pending' | 'cancelled')} style={{ color:'#000', marginLeft:12, padding:2, borderRadius:4}}>
                     <option value="all">All</option>
                     <option value="completed">Completed</option>

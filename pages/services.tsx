@@ -30,7 +30,7 @@ export default function Services() {
   return (
     <Layout style={{ minHeight: '100vh', background: 'transparent' }}>
       <Header style={{ padding: '8px 16px', background: 'rgba(34, 17, 68, 0.8)', color: '#e0d4ff', textAlign: 'center' }}>
-        <Title level={2} style={{ color: '#ffffff', margin: 0, display: 'inline-block' }}>Pray Service Provide</Title>
+        <Title level={2} style={{ color: '#ffffff', margin: 0, display: 'inline-block' }}>Joss paper burning service</Title>
       </Header>
       <Content style={{ padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Row gutter={[16, 16]} style={{ width: '90%', maxWidth: '800px'}}>
