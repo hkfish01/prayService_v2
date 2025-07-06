@@ -20,13 +20,23 @@ function ServiceCard({ service, wallet }: { service: Record<string, unknown>, wa
 
   return (
     <div style={{ border: "1px solid #eee", margin: 2, padding: 16, width: "100%", background: "#ffffff", borderRadius: "8px" }}>
-      <Image src={typeof service.imageUrl === 'string' && service.imageUrl !== 'NA' ? service.imageUrl : '/default.jpg'} alt={String(service.title)} width={400} height={200} style={{ width: '100%', objectFit: 'cover' }} />
+      <Image
+        src={typeof service.imageUrl === 'string' && service.imageUrl !== 'NA'
+          ? service.imageUrl
+          : (typeof service.category === 'string' && service.category.trim() !== ''
+              ? `/${service.category.trim().toLowerCase().replace(/\s+/g, '_')}.jpg`
+              : '/default.jpg')}
+        alt={String(service.title)}
+        width={400}
+        height={200}
+        style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+      />
       <h3 style={{margin:'10px 0px'}}>{String(service.title)}</h3>
       <p style={{margin:'10px 0px'}}>{String(service.description)}</p>
-      <p style={{margin:'10px 0px'}}>Price: {service.price ? Number(service.price as string) / 1e18 : 0} BNB</p>
+      <p style={{margin:'10px 0px'}}>Price: {service.price ? (Number(service.price as string) / 1e18).toFixed(4) : '0.0000'} BNB</p>
       {/* <p style={{margin:'10px 0px'}}>Contact Method: {service.contactMethod}</p> */}
       <p style={{margin:'10px 0px'}}>Service Provider: {typeof service.provider === 'string' ? service.provider.slice(0, 6) + '...' + service.provider.slice(-4) : ''}</p>
-      {wallet && (
+      {wallet && typeof service.provider === 'string' && service.provider.toLowerCase() !== wallet.toLowerCase() && (
         <div>
           <input
             placeholder="Your Contact Method"

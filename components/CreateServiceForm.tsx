@@ -25,7 +25,7 @@ export default function CreateServiceForm({ onCreated }: { onCreated?: () => voi
     try {
       const signer = await connectWallet();
       const contract = getContract(signer);
-      const img = `/${category.toLowerCase()}.jpg`;
+      const img = `/${category.trim().toLowerCase().replace(/\s+/g, '_')}.jpg`;
       await contract.createService(title, desc, img, parseEther(price), contact);
       alert("Publish Success.");
       setTitle("");

@@ -24,7 +24,7 @@ export default function CreateRequestForm({ onCreated }: { onCreated?: () => voi
     try {
       const signer = await connectWallet();
       const contract = getContract(signer);
-      const img = `/${category.toLowerCase()}.jpg`;
+      const img = `/${category.trim().toLowerCase().replace(/\s+/g, '_')}.jpg`;
       await contract.createRequest(title, desc, img, parseEther(price));
       alert("Publish Success.");
       setTitle("");
