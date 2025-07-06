@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getProvider, connectWallet } from "../libs/web3";
 import { getContract } from "../libs/contract";
-import ProfileInfo from "../components/ProfileInfo";
 import WalletConnect from "../components/WalletConnect";
 import ServiceCard from "../components/ServiceCard";
 import RequestCard from "../components/RequestCard";
