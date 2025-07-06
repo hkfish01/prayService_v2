@@ -3,7 +3,7 @@ import { connectWallet } from "../libs/web3";
 
 // 定義 EthereumProvider 型別
 interface EthereumProvider {
-  request: (args: { method: string }) => Promise<any>;
+  request: (args: { method: string }) => Promise<unknown>;
   on?: (event: string, handler: (...args: unknown[]) => void) => void;
   removeListener?: (event: string, handler: (...args: unknown[]) => void) => void;
 }
@@ -17,28 +17,26 @@ declare global {
 function WalletConnect({ onConnected }: { onConnected: (address: string) => void }) {
   const [address, setAddress] = useState<string | null>(null);
 
-  // 檢查當前連接狀態
-  const checkWallet = async () => {
-    if (typeof window === "undefined" || !(window.ethereum as EthereumProvider)) return;
-    try {
-      const accounts = await (window.ethereum as EthereumProvider).request({ method: 'eth_accounts' }) as string[];
-      if (accounts && accounts[0]) {
-        setAddress(accounts[0]);
-        localStorage.setItem('wallet', accounts[0]);
-        onConnected(accounts[0]);
-      } else {
+  useEffect(() => {
+    const checkWallet = async () => {
+      if (typeof window === "undefined" || !(window.ethereum as EthereumProvider)) return;
+      try {
+        const accounts = await (window.ethereum as EthereumProvider).request({ method: 'eth_accounts' }) as string[];
+        if (accounts && accounts[0]) {
+          setAddress(accounts[0]);
+          localStorage.setItem('wallet', accounts[0]);
+          onConnected(accounts[0]);
+        } else {
+          setAddress(null);
+          localStorage.removeItem('wallet');
+          onConnected("");
+        }
+      } catch {
         setAddress(null);
         localStorage.removeItem('wallet');
         onConnected("");
       }
-    } catch {
-      setAddress(null);
-      localStorage.removeItem('wallet');
-      onConnected("");
-    }
-  };
-
-  useEffect(() => {
+    };
     checkWallet();
     const eth = window.ethereum as EthereumProvider;
     if (eth && eth.on) {
@@ -49,7 +47,7 @@ function WalletConnect({ onConnected }: { onConnected: (address: string) => void
         eth.removeListener('accountsChanged', checkWallet);
       }
     };
-  }, [onConnected, checkWallet]);
+  }, [onConnected]);
 
   const handleConnect = async () => {
     try {

@@ -11,6 +11,7 @@ const { Title } = Typography;
 
 export default function Request() {
   const [requests, setRequests] = useState<Record<string, unknown>[]>([]);
+  const [wallet, setWallet] = useState<string | null>(null);
 
   const fetchRequests = async () => {
     const provider = await getProvider();
@@ -31,7 +32,7 @@ export default function Request() {
       <Content style={{ padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Row gutter={[16, 16]} style={{ width: '90%', maxWidth: '800px'}}>
           <Col span={24} style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center' }}>
-            <WalletConnect onConnected={() => {}} />
+            <WalletConnect onConnected={setWallet} />
           </Col>
           <Col span={24} style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center', background: 'rgba(255, 255, 255, 0.9)', borderRadius: '8px', boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)', padding: '20px'  }}>
             <div style={{ animation: 'fadeInDown 0.5s ease-out', borderRadius: '8px', overflow: 'hidden', width: '100%', maxWidth: '500px', padding: '10px' }}>
@@ -42,7 +43,7 @@ export default function Request() {
             <Row gutter={[16, 16]}>
               {requests.map((req) => ( 
                 <Col key={(req as Record<string, unknown>).id as string} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((req as Record<string, unknown>).id) % 4) * 0.1}s both` }}>
-                  <RequestCard request={req as Record<string, unknown>} />
+                  <RequestCard request={req as Record<string, unknown>} wallet={wallet} />
                 </Col>
               ))}
             </Row>
