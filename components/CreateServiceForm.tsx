@@ -26,8 +26,15 @@ export default function CreateServiceForm({ onCreated }: { onCreated?: () => voi
       const signer = await connectWallet();
       const contract = getContract(signer);
       const img = `/${category.trim().toLowerCase().replace(/\s+/g, '_')}.jpg`;
-      await contract.createService(title, desc, img, parseEther(price), contact);
+      await contract.createService(
+        title,
+        desc,
+        img,
+        parseEther(price),
+        contact
+      );
       alert("Publish Success.");
+      window.location.reload();
       setTitle("");
       setDesc("");
       setCategory(categories[0] || "");
@@ -43,18 +50,18 @@ export default function CreateServiceForm({ onCreated }: { onCreated?: () => voi
   return (
     <form onSubmit={handleSubmit} style={{ margin: 16 }}>
       <h2>Post a pray service</h2>
-      <input placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} required  style={{margin:'5px 0px', color:'#ffffff'}}/><br />
-      <textarea placeholder="Description of the Job" value={desc} onChange={e => setDesc(e.target.value)} required  style={{margin:'5px 0px', color:'#ffffff'}}/><br />
+      <input placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} required  style={{margin:'5px 0px', color:'#ffffff', width:'100%'}}/><br />
+      <textarea placeholder="Description of the Job" value={desc} onChange={e => setDesc(e.target.value)} required  style={{margin:'5px 0px', color:'#ffffff', width:'100%'}}/><br />
       {isClient && (
-        <select value={category} onChange={e => setCategory(e.target.value)} required style={{margin:'5px 0px', color:'#ffffff', background: 'rgba(54, 37, 88, 0.8)'}}>
+        <select value={category} onChange={e => setCategory(e.target.value)} required style={{margin:'5px 0px', color:'#ffffff', background: 'rgba(54, 37, 88, 0.8)', width:'100%', height:'40px'}}>
           {categories.map((cat) => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
       )}<br />
-      <input placeholder="Price(BNB)" value={price} onChange={e => setPrice(e.target.value)} required type="number" min="0" step="0.0001"  style={{margin:'5px 0px', color:'#ffffff'}}/><br />
-      <input placeholder="Contact Method" value={contact} onChange={e => setContact(e.target.value)} required  style={{margin:'5px 0px', color:'#ffffff'}}/><br />
-      <button type="submit" disabled={loading}  style={{margin:'5px 0px', color:"#ffffff"}}>{loading ? "Publishing..." : "Published"}</button>
+      <input placeholder="Price(BNB)" value={price} onChange={e => setPrice(e.target.value)} required type="number" min="0" step="0.0001"  style={{margin:'5px 0px', color:'#ffffff', width:'100%'}}/><br />
+      <input placeholder="Contact Method" value={contact} onChange={e => setContact(e.target.value)} required  style={{margin:'5px 0px', color:'#ffffff', width:'100%'}}/><br />
+      <button type="submit" disabled={loading}  style={{margin:'5px 0px', color:"#ffffff", width:'100%', height:'40px', textAlign:'center'}}>{loading ? "Publishing..." : "Published"}</button>
     </form>
   );
 }

@@ -9,8 +9,22 @@ export async function getProvider() {
 }
 
 export async function connectWallet() {
-  const provider = await getProvider();
-  await provider.send("eth_requestAccounts", []);
-  const signer = await provider.getSigner();
-  return signer;
+  try {
+    const provider = await getProvider();
+    console.log('[connectWallet] provider loaded', provider);
+    const accounts = await provider.send("eth_requestAccounts", []);
+    if (!accounts || !accounts[0]) {
+      alert("Please check if you have authorized the wallet!");
+      throw new Error("No wallet address returned");
+    }
+    const address = accounts[0];
+    localStorage.setItem('wallet', address);
+    const signer = await provider.getSigner();
+    console.log('[connectWallet] connected address:', address);
+    return signer;
+  } catch (err) {
+    console.error('[connectWallet] error:', err);
+    alert("Connection failed, please check if you have installed MetaMask and authorized!");
+    throw err;
+  }
 }

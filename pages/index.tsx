@@ -72,7 +72,7 @@ export default function Home() {
             <Row gutter={[16, 16]}>
               {requests.map((req) => ( 
                 <Col key={(req as Record<string, unknown>).id as string} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((req as Record<string, unknown>).id) % 4) * 0.1}s both` }}>
-                  <RequestCard request={req as Record<string, unknown>} />
+                  <RequestCard request={req as Record<string, unknown>} wallet={null} />
                 </Col>
               ))}
             </Row>
@@ -82,7 +82,7 @@ export default function Home() {
             <Row gutter={[16, 16]}>
               {services.map((service) => ( 
                 <Col key={(service as Record<string, unknown>).id as string} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((service as Record<string, unknown>).id) % 4) * 0.1}s both` }}>
-                  <ServiceCard service={service as Record<string, unknown>} wallet={wallet} />
+                  <ServiceCard service={service as Record<string, unknown>} wallet={null} />
                 </Col>
               ))}
             </Row>

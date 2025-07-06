@@ -1,14 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connectWallet } from "../libs/web3";
 
 function WalletConnect({ onConnected }: { onConnected: (address: string) => void }) {
   const [address, setAddress] = useState<string | null>(null);
+
+  // 檢查當前連接狀態
+  const checkWallet = async () => {
+    if (typeof window === "undefined" || !(window as any).ethereum) return;
+    try {
+      const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
+      if (accounts && accounts[0]) {
+        setAddress(accounts[0]);
+        localStorage.setItem('wallet', accounts[0]);
+        onConnected(accounts[0]);
+      } else {
+        setAddress(null);
+        localStorage.removeItem('wallet');
+        onConnected("");
+      }
+    } catch {
+      setAddress(null);
+      localStorage.removeItem('wallet');
+      onConnected("");
+    }
+  };
+
+  useEffect(() => {
+    checkWallet();
+    if ((window as any).ethereum) {
+      (window as any).ethereum.on('accountsChanged', checkWallet);
+    }
+    return () => {
+      if ((window as any).ethereum && (window as any).ethereum.removeListener) {
+        (window as any).ethereum.removeListener('accountsChanged', checkWallet);
+      }
+    };
+  }, [onConnected]);
 
   const handleConnect = async () => {
     try {
       const signer = await connectWallet();
       const address = await signer.getAddress();
       setAddress(address);
+      localStorage.setItem('wallet', address);
       onConnected(address);
     } catch {
       alert("Wallet connect fail.");

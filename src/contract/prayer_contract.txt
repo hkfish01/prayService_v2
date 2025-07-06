@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -43,6 +43,9 @@ contract PrayerService is ReentrancyGuard, Ownable {
         uint256 timestamp;
         bool isCompleted;
         string contactInfo; // encrypted contact exchange
+        bool isCancelled;
+        string cancelReason;
+        string ancestorInfo;
     }
     
     mapping(uint256 => Service) public services;
@@ -111,7 +114,11 @@ contract PrayerService is ReentrancyGuard, Ownable {
         emit RequestCreated(requestCounter, msg.sender, _title, _price);
     }
     
-    function purchaseService(uint256 _serviceId, string memory _contactInfo) external payable nonReentrant {
+    function purchaseService(
+        uint256 _serviceId,
+        string memory _contactInfo,
+        string memory _ancestorInfo
+    ) external payable nonReentrant {
         require(services[_serviceId].isActive, "Service not active");
         require(msg.value == services[_serviceId].price, "Incorrect payment amount");
         require(services[_serviceId].provider != msg.sender, "Cannot purchase own service");
@@ -129,7 +136,10 @@ contract PrayerService is ReentrancyGuard, Ownable {
             platformFee: platformFee,
             timestamp: block.timestamp,
             isCompleted: false,
-            contactInfo: _contactInfo
+            contactInfo: _contactInfo,
+            isCancelled: false,
+            cancelReason: "",
+            ancestorInfo: _ancestorInfo
         });
 
         userTransactions[msg.sender].push(transactionCounter);
@@ -143,6 +153,7 @@ contract PrayerService is ReentrancyGuard, Ownable {
         Transaction storage transaction = transactions[_transactionId];
         require(msg.sender == transaction.requester, "Only the requester can confirm the service");
         require(!transaction.isCompleted, "Service already confirmed");
+        require(!transaction.isCancelled, "Transaction already cancelled");
 
         uint256 providerAmount = transaction.amount - transaction.platformFee;
         transaction.isCompleted = true;
@@ -223,5 +234,15 @@ contract PrayerService is ReentrancyGuard, Ownable {
     
     function getContractBalance() external view returns (uint256) {
         return address(this).balance;
+    }
+
+    function cancelTransaction(uint256 _transactionId, string memory _reason) external nonReentrant {
+        Transaction storage transaction = transactions[_transactionId];
+        require(msg.sender == transaction.requester, "Only the buyer can cancel");
+        require(!transaction.isCompleted, "Already completed");
+        require(!transaction.isCancelled, "Already cancelled");
+        transaction.isCancelled = true;
+        transaction.cancelReason = _reason;
+        payable(transaction.requester).transfer(transaction.amount);
     }
 }

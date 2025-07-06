@@ -182,6 +182,24 @@
 				"internalType": "uint256",
 				"name": "_transactionId",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_reason",
+				"type": "string"
+			}
+		],
+		"name": "cancelTransaction",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_transactionId",
+				"type": "uint256"
 			}
 		],
 		"name": "confirmService",
@@ -485,6 +503,11 @@
 				"internalType": "string",
 				"name": "_contactInfo",
 				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_ancestorInfo",
+				"type": "string"
 			}
 		],
 		"name": "purchaseService",
@@ -704,6 +727,21 @@
 			{
 				"internalType": "string",
 				"name": "contactInfo",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "isCancelled",
+				"type": "bool"
+			},
+			{
+				"internalType": "string",
+				"name": "cancelReason",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "ancestorInfo",
 				"type": "string"
 			}
 		],

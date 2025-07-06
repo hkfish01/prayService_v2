@@ -21,6 +21,9 @@ export default function Services() {
   };
 
   useEffect(() => {
+    // 自動恢復 wallet
+    const w = localStorage.getItem('wallet');
+    if (w) setWallet(w);
     fetchServices();
   }, []);
 
