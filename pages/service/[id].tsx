@@ -131,7 +131,7 @@ export default function ServiceDetail() {
               type="date"
               style={{ width: "100%", color:"#FFF", marginBottom: '10px', border:'1px solid #ccc', borderRadius:4, padding:8 }}
             />
-            <button onClick={handleBuy} style={{color:'#fff', background:'#4caf50', border:'none', padding:'8px 16px', borderRadius:4, cursor:'pointer'}}>Buy</button>
+            <button onClick={handleBuy} style={{color:'#fff', background:'#4caf50', border:'none', padding:'8px 16px', borderRadius:4, cursor:'pointer'}}>Submit</button>
           </div>
         )}
       </div>

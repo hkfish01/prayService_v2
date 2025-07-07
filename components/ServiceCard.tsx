@@ -49,7 +49,7 @@ function ServiceCard({ service, wallet }: { service: Record<string, unknown>, wa
         </button>
       )}
       {wallet && typeof service.provider === 'string' && service.provider.toLowerCase() !== wallet.toLowerCase() && (
-        <button onClick={() => router.push(`/service/${service.id}`)} style={{color:'#ffffff'}}>Buy</button>
+        <button onClick={() => router.push(`/service/${service.id}`)} style={{color:'#ffffff'}}>Submit</button>
       )}
     </div>
   );
