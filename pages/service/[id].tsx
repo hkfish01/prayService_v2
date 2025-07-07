@@ -72,7 +72,7 @@ export default function ServiceDetail() {
     <>
       <WalletConnect onConnected={setWallet} />
       <div style={{ maxWidth: 600, margin: '40px auto', background: '#fff', borderRadius: 8, padding: 24 }}>
-        <button onClick={() => window.history.back()} style={{marginRight:12,marginTop:10,marginBottom:10,padding:'4px 12px',borderRadius:4,border:'1px solid #888',background:'#eee',cursor:'pointer'}}>返回</button>
+        <button onClick={() => window.history.back()} style={{marginRight:12,marginTop:10,marginBottom:10,padding:'4px 12px',borderRadius:4,border:'1px solid #888',background:'#eee',cursor:'pointer'}}>Back</button>
         <h2 style={{margin:'20px 0'}}>{String(service.title)}</h2>
         <Image
           src={typeof service.imageUrl === 'string' && service.imageUrl !== 'NA'
