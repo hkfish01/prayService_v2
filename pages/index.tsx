@@ -63,12 +63,12 @@ export default function Home() {
       </Header>
       <Content style={{ padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Row gutter={[16, 16]} style={{ width: '90%', maxWidth: '800px'}}>
-          <Col span={24}>
+          <Col span={24}> 
             <Title level={3} style={{color:'#ffffff'}}>Request Joss Paper Burning Service</Title>
             <Row gutter={[16, 16]}>
               {requests.map((req) => ( 
                 <Col key={(req as Record<string, unknown>).id as string} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((req as Record<string, unknown>).id) % 4) * 0.1}s both` }}>
-                  <RequestCard request={req as Record<string, unknown>} wallet={null} />
+                  <RequestCard request={req as Record<string, unknown>} wallet={null} /> 
                 </Col>
               ))}
             </Row>
@@ -78,9 +78,70 @@ export default function Home() {
             <Row gutter={[16, 16]}>
               {services.map((service) => ( 
                 <Col key={(service as Record<string, unknown>).id as string} xs={24} sm={12} md={8} lg={8} style={{ animation: `fadeInDown 0.5s ease-out ${(Number((service as Record<string, unknown>).id) % 4) * 0.1}s both` }}>
-                  <ServiceCard service={service as Record<string, unknown>} wallet={null} />
+                  <ServiceCard service={service as Record<string, unknown>} wallet={null} /> 
                 </Col>
               ))}
+            </Row>
+          </Col>
+          <Col span={24} style={{ marginTop: '48px' }}>
+            <Title level={2} style={{color:'#ffffff', textAlign: 'center', marginBottom: '40px'}}>How It Works</Title>
+            <Row gutter={[24, 24]} justify="space-around">
+              <Col xs={24} md={7} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ 
+                  width: '80px', 
+                  height: '80px', 
+                  borderRadius: '50%', 
+                  background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: '20px'
+                }}>
+                  <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>1</span>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <Title level={4} style={{color:'#ffffff', marginBottom: '8px'}}>Connect Wallet</Title>
+                  <p style={{ color: '#e0d4ff' }}>Click the wallet connection button to connect your wallet securely</p>
+                </div>
+              </Col>
+              
+              <Col xs={24} md={7} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ 
+                  width: '80px', 
+                  height: '80px', 
+                  borderRadius: '50%', 
+                  background: 'linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: '20px'
+                }}>
+                  <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>2</span>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <Title level={4} style={{color:'#ffffff', marginBottom: '8px'}}>Choose Service</Title>
+                  <p style={{ color: '#e0d4ff' }}>Browse our services and select the one that meets your spiritual needs</p>
+                </div>
+              </Col>
+              
+              <Col xs={24} md={7} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ 
+                  width: '80px', 
+                  height: '80px', 
+                  borderRadius: '50%', 
+                  background: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: '20px'
+                }}>
+                  <span style={{ fontSize: '32px', fontWeight: 'bold', color: 'white' }}>3</span>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <Title level={4} style={{color:'#ffffff', marginBottom: '8px'}}>Complete Order</Title>
+                  <p style={{ color: '#e0d4ff' }}>Provide details and submit to finalize your spiritual service request</p>
+                </div>
+              </Col>
             </Row>
           </Col>
         </Row>

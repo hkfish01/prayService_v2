@@ -44,6 +44,7 @@ export default function ServiceDetail() {
     setClosing(false);
   };
 
+
   const handleBuy = async () => {
     if (!service) return;
     const ancestorInfo = [ancestorName, ancestorBirthPlace, ancestorBirthDate, ancestorDeadDate].join('|');
@@ -137,4 +138,69 @@ export default function ServiceDetail() {
       </div>
     </>
   );
-} 
+}
+import { parse } from 'pg-connection-string';
+
+async function performDnsLookupAndGetConnectionString(config: string | Record<string, unknown> | undefined) {
+  const parsedConfig = typeof config === 'string' ? parse(config) : config || {};
+  const parsedConfigWithStringValues = {
+    ...parsedConfig,
+    user: parsedConfig.user ? String(parsedConfig.user) : undefined,
+    password: parsedConfig.password ? String(parsedConfig.password) : undefined,
+    port: parsedConfig.port ? String(parsedConfig.port) : undefined,
+    database: parsedConfig.database ? String(parsedConfig.database) : undefined,
+    host: parsedConfig.host ? String(parsedConfig.host) : undefined
+  };
+  const host = parsedConfigWithStringValues.host || process.env.PGHOST;
+  
+  if (!host) {
+    throw new Error('No host specified for database connection');
+  }
+
+  const { lookup } = await import('dns');
+  return new Promise((resolve, reject) => {
+    lookup(host, (err, address) => {
+      if (err) return reject(err);
+      
+      const connectionString = `postgres://${parsedConfigWithStringValues.user}:${parsedConfigWithStringValues.password}@${address}:${parsedConfigWithStringValues.port}/${parsedConfigWithStringValues.database}`;
+      resolve(connectionString);
+    });
+  });
+}
+
+
+class CustomConnectionParameters {
+  config: Record<string, unknown>;
+  constructor(config: string | Record<string, unknown> = {}) {
+    this.config = typeof config === 'string' ? parse(config) : config;
+  }
+
+  async getLibpqConnectionString() {
+    try {
+      const connectionString = await performDnsLookupAndGetConnectionString(this.config);
+      const params = [];
+      const parsed = parse(connectionString as string) as Record<string, unknown>;
+      
+      if (parsed.user) params.push(`user=${quoteParamValue(String(parsed.user))}`);
+      if (parsed.password) params.push(`password=${quoteParamValue(String(parsed.password))}`);
+      if (parsed.port) params.push(`port=${quoteParamValue(String(parsed.port))}`);
+      if (parsed.dbname) params.push(`dbname=${quoteParamValue(String(parsed.dbname))}`);
+      if (parsed.host) params.push(`host=${quoteParamValue(String(parsed.host))}`);
+      
+      return params.join(' ');
+    } catch (err) {
+      throw err;
+    }
+  }
+}
+
+function quoteParamValue(value: unknown) {
+  return `'${String(value).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+}
+
+// 使用 CustomConnectionParameters 類示例
+const exampleConfig = 'postgresql://user:password@localhost:5432/mydb';
+const connectionParams = new CustomConnectionParameters(exampleConfig);
+connectionParams.getLibpqConnectionString().then((result) => {
+  console.log('Connection string:', result);
+});

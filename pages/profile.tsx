@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState, useRef } from "react";
 import { getProvider, connectWallet } from "../libs/web3";
 import { getContract } from "../libs/contract";
@@ -6,11 +7,40 @@ import ServiceCard from "../components/ServiceCard";
 import RequestCard from "../components/RequestCard";
 import PurchaseCard from "../components/PurchaseCard";
 
+// Remove the import of Pool from 'pg'
+
 interface Transaction {
   requester: string;
   isCompleted: boolean;
   isCancelled: boolean;
   [key: string]: unknown;
+}                                                                                 
+
+// Define server action
+const submitReview = async (transactionId: string | number, rating: number, comment: string) => {
+  const { Pool } = await import('pg');
+  try {
+    const pool = new Pool({
+      connectionString: 'postgresql://neondb_owner:npg_3SDLYaCTvZr8@ep-steep-recipe-ae1imiso-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+    });
+    
+    await pool.query(
+      'CREATE TABLE IF NOT EXISTS reviews (id SERIAL PRIMARY KEY, transaction_id TEXT, rating INTEGER, comment TEXT)' 
+    );
+    
+    await pool.query(
+      'INSERT INTO reviews (transaction_id, rating, comment) VALUES ($1, $2, $3)',
+      [transactionId, rating, comment]
+    );
+    
+    await pool.end();
+    
+    console.log('Submit:', { rating, comment, transactionId });
+    return true;
+  } catch (error) {
+    console.error('Submit Fail:', error);
+    return false;
+  }
 }
 
 export default function Profile() {
@@ -87,6 +117,51 @@ export default function Profile() {
     fetchProfile();
   }, [wallet]);
 
+  const ReviewModal = ({ isOpen, onClose, transactionId }: { isOpen: boolean; onClose: () => void; transactionId: string | number }) => {
+    const [rating, setRating] = useState<number>(0);
+    const [comment, setComment] = useState<string>('');
+    
+    const handleSubmitReview = async () => {
+      const success = await submitReview(transactionId, rating, comment);
+      if (success) {
+        alert('Submit Success!');
+        onClose();
+      } else {
+        alert('Submit Fail');
+      }
+    };
+    
+    return (
+      <div style={{ display: isOpen ? 'block' : 'none', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 1000 }}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', padding: '20px', borderRadius: '8px', width: '400px' }}>
+          <h3 style={{ marginBottom: '10px' }}>Please review the service</h3>
+          <div style={{ marginBottom: '10px' }}>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <span
+                key={star}
+                onClick={() => setRating(star)}
+                style={{ cursor: 'pointer', color: star <= rating ? 'gold' : 'gray' }}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Please fill in the review (Max 200 words)"
+            maxLength={200}
+            style={{ width: '100%', height: '100px', marginBottom: '10px' }}
+          />
+          <div style={{ textAlign: 'right' }}>
+            <button onClick={onClose} style={{ marginRight: '10px', padding: '5px 10px' }}>Cancel</button>
+            <button onClick={handleSubmitReview} style={{ padding: '5px 10px' }}>Submit</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const confirmService = async (transactionId: string | number) => {
     if (!wallet) return alert("Please connect your wallet first.");
     try {
@@ -105,15 +180,32 @@ export default function Profile() {
         purchasedSrvs.push({ service: ps, transactionId: id, transaction });
       }
       setPurchasedServices(purchasedSrvs);
+      setShowReviewModal(true);
+      setCurrentTransactionId(transactionId);
     } catch (err: unknown) {
       alert("Confirm the service failed: " + (err instanceof Error ? err.message : String(err)));
     }
+  };
+
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [currentTransactionId, setCurrentTransactionId] = useState<string | number | null>(null);
+
+  const handleReviewClick = (transactionId: string | number) => {
+    setShowReviewModal(true);
+    setCurrentTransactionId(transactionId);
   };
 
   return (
     <div>
       <h1 style={{ textAlign: "center", marginBottom: 20, fontSize: 24, fontWeight: "bold", color: "#FFFFFF" }}>Profile</h1>
       <WalletConnect onConnected={setWallet} />
+      {showReviewModal && (
+        <ReviewModal
+          isOpen={showReviewModal}
+          onClose={() => setShowReviewModal(false)}
+          transactionId={currentTransactionId || ''}
+        />
+      )}
       {/* 手機版跳轉菜單 */}
       {isMobile && (
         <div style={{ display: 'flex', justifyContent: 'space-around', margin: '16px 0' }}>
@@ -199,9 +291,10 @@ export default function Profile() {
                   {myRequests.map((service) => (
                     <div style={{ display: 'flex', justifyContent: 'center', margin: '0 10px', maxWidth: 300, width: '100%' }} key={String(service.transactionId)}>
                       <PurchaseCard 
-                        purchase={service} 
-                        confirmService={confirmService} 
+                        purchase={service}
                         wallet={wallet}
+                        confirmService={confirmService}
+                        onReviewClick={handleReviewClick}
                       />
                     </div>
                   ))}
@@ -231,6 +324,7 @@ export default function Profile() {
                         purchase={service} 
                         confirmService={confirmService} 
                         wallet={wallet}
+                        onReviewClick={handleReviewClick}
                       />
                     </div>
                   ))}
